@@ -2,7 +2,8 @@ from multiprocessing import connection
 from pprint import pprint
 import sqlite3
 
-from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
+from flask import Flask, jsonify, render_template, request, url_for, redirect, flash
+from logging.config import dictConfig
 from werkzeug.exceptions import abort
 
 open_connections = 0
@@ -22,9 +23,25 @@ def get_post(post_id):
     post = connection.execute('SELECT * FROM posts WHERE id = ?',
                         (post_id,)).fetchone()
     connection.close()
+    app.logger.info('Article %s retrieved', dict(post).get('title'))
     return post
 
 # Define the Flask application
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi']
+    }
+})
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
 
@@ -42,13 +59,16 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
+      app.logger.warn('Article could not be found')
       return render_template('404.html'), 404
+      
     else:
       return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
+    app.logger.info('The "About Us" page is retrieved.')
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -65,6 +85,7 @@ def create():
             connection.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
                          (title, content))
             connection.commit()
+            app.logger.info('New Article created: %s', title)
             connection.close()
 
             return redirect(url_for('index'))
