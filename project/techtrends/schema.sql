@@ -6,3 +6,7 @@ CREATE TABLE posts (
     title TEXT NOT NULL,
     content TEXT NOT NULL
 );
+
+CREATE TABLE connections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+)

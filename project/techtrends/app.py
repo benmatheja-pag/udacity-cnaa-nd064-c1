@@ -1,13 +1,19 @@
+from multiprocessing import connection
+from pprint import pprint
 import sqlite3
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
 
+open_connections = 0
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
+    connection.execute('INSERT INTO connections VALUES (null)')
+    connection.commit()
+
     return connection
 
 # Function to get a post using its ID
@@ -64,6 +70,27 @@ def create():
             return redirect(url_for('index'))
 
     return render_template('create.html')
+
+# Define the healthz check endpoint
+@app.route('/healthz', methods=['GET'])
+def healthcheck():
+    resp = jsonify(result="OK - healthy")
+    return resp
+
+# Return the total amount of posts in the database 
+# Return the total amount of connections in the database
+@app.route('/metrics', methods=['GET'])
+def metrics():
+    connection = get_db_connection()
+    rows = connection.execute('SELECT COUNT(*) FROM posts').fetchall()
+    for row in rows:
+        number_of_posts= list(row)[0]
+    
+    rows = connection.execute('SELECT COUNT(*) FROM connections').fetchall()
+    for row in rows:
+        connections= list(row)[0]
+    resp = jsonify(status='OK', posts_count=number_of_posts, db_connection_count=connections)
+    return resp
 
 # start the application on port 3111
 if __name__ == "__main__":
