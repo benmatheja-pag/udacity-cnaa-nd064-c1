@@ -1,0 +1,3 @@
+/techtrends/venv*
+/techtrends/__pycache__
+/techtrends/database.db
