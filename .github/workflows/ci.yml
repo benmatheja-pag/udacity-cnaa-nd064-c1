@@ -25,4 +25,4 @@ jobs:
         with:
           context: "{{defaultContext}}:project"
           push: true
-          tags: techtrends:latest 
+          tags: benmatheja/techtrends:latest 
