@@ -1,11 +1,10 @@
 ---
 namespaceName: prod
-imageRepository: techtrends
+imageRepository: benmatheja/techtrends
 servicePort: 7111
 serviceTargetPort: 3111
 servivceProtocol: TCP
 serviceType: ClusterIP
-imageRepository: techtrends
 imageTag: latest
 imagePullPolicy: Always
 replicaCount: 5

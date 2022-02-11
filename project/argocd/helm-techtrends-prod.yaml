@@ -1,2 +1,17 @@
-name: techtrends-prod
-valuesFile: Values-Prod.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: techtrends-prod
+  namespace: argocd
+spec:
+  destination:
+    namespace: prod
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      valueFiles:
+      - Values-Prod.yaml
+    path: 'project/helm'
+    repoURL: 'https://github.com/benmatheja-pag/udacity-cnaa-nd064-c1'
+    targetRevision: HEAD

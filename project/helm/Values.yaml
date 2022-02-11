@@ -1,11 +1,10 @@
 ---
 namespaceName: sandbox
-imageRepository: techtrends
+imageRepository: benmatheja/techtrends
 servicePort: 4111
 serviceTargetPort: 3111
 servivceProtocol: TCP
 serviceType: ClusterIP
-imageRepository: techtrends
 imageTag: latest
 imagePullPolicy: IfNotPresent
 replicaCount: 1
