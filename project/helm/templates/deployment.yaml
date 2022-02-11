@@ -17,7 +17,6 @@ spec:
       containers:
       - name: techtrends
         image: {{- $image := printf "%s:%s" .Values.imageRepository .Values.imageTag -}}
-        #imagePullPolicy: {{ .Values.imagePullPolicy }}
         resources:
           requests:
             cpu: {{ .Values.resourcesRequestsCpu }}
@@ -35,5 +34,3 @@ spec:
           httpGet:
             path: {{ .Values.probePath }}
             port: {{ .Values.containerPort }}
-
-# lol https://github.com/helm/helm/issues/8026
