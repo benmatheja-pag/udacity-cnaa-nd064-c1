@@ -1,2 +1,17 @@
-name: techtrends-staging
-valuesFile: Values-Staging.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: techtrends-staging
+  namespace: argocd
+spec:
+  destination:
+    namespace: staging
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      valueFiles:
+      - Values-Staging.yaml
+    path: 'project/helm'
+    repoURL: 'https://github.com/benmatheja-pag/udacity-cnaa-nd064-c1'
+    targetRevision: HEAD
