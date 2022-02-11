@@ -17,7 +17,7 @@ spec:
       containers:
       - name: techtrends
         image: {{- $image := printf "%s:%s" .Values.imageRepository .Values.imageTag -}}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        #imagePullPolicy: {{ .Values.imagePullPolicy }}
         resources:
           requests:
             cpu: {{ .Values.resourcesRequestsCpu }}
