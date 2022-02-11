@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: techtrends
-        image: {{- $image := printf "%s:%s" .Values.imageRepository .Values.imageTag -}}
+        image: {{ .Values.imageRepository }}:{{ .Values.imageTag }}
         resources:
           requests:
             cpu: {{ .Values.resourcesRequestsCpu }}
