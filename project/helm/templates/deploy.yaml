@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techtrends
+  namespace: {{ .Values.namespaceName }}
+spec:
+  selector:
+    matchLabels:
+      app: techtrends
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: techtrends
+    spec:
+      containers:
+      - name: techtrends
+        image: {{- $image := printf "%s:%s" .Values.imageRepository .Values.imageTag -}}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        resources:
+          requests:
+            cpu: {{ .Values.resourcesRequestsCpu }}
+            memory: {{ .Values.resourcesRequestsMemory }}
+          limits:
+            cpu: {{ .Values.resourcesLimitsCpu }}
+            memory: {{ .Values.resourcesLimitsMemory }}
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: {{ .Values.containerPort }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: {{ .Values.containerPort }}
+
+# lol https://github.com/helm/helm/issues/8026

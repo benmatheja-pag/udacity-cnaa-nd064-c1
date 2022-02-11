@@ -1,0 +1,17 @@
+---
+namespaceName: prod
+imageRepository: techtrends
+servicePort: 7111
+serviceTargetPort: 3111
+servivceProtocol: TCP
+serviceType: ClusterIP
+imageRepository: techtrends
+imageTag: latest
+imagePullPolicy: Always
+replicaCount: 5
+resourcesRequestsMemory: 128Mi
+resourcesRequestsCpu: 350m
+resourcesLimitsMemory: 256Mi
+resourcesLimitsCpu: 500m
+containerPort: 3111
+probePath: /healthz

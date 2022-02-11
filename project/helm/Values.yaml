@@ -1,0 +1,17 @@
+---
+namespaceName: sandbox
+imageRepository: techtrends
+servicePort: 4111
+serviceTargetPort: 3111
+servivceProtocol: TCP
+serviceType: ClusterIP
+imageRepository: techtrends
+imageTag: latest
+imagePullPolicy: IfNotPresent
+replicaCount: 1
+resourcesRequestsMemory: 64Mi
+resourcesRequestsCpu: 250m
+resourcesLimitsMemory: 128Mi
+resourcesLimitsCpu: 500m
+containerPort: 3111
+probePath: /healthz

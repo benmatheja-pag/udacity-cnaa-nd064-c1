@@ -1,0 +1,5 @@
+name: techtrends
+apiVersion: v1
+keywords: ["techtrends"]
+version: 1.0.0
+maintainer: ben
