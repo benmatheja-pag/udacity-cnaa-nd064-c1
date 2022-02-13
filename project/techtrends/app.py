@@ -1,10 +1,8 @@
-from multiprocessing import connection
-from pprint import pprint
+import logging
 import sqlite3
 
 from flask import Flask, jsonify, render_template, request, url_for, redirect, flash
 from logging.config import dictConfig
-from werkzeug.exceptions import abort
 
 open_connections = 0
 # Function to get a database connection.
@@ -23,27 +21,11 @@ def get_post(post_id):
     post = connection.execute('SELECT * FROM posts WHERE id = ?',
                         (post_id,)).fetchone()
     connection.close()
-    app.logger.info('Article %s retrieved', dict(post).get('title'))
+    if (post):
+        app.logger.info('Article %s retrieved', dict(post).get('title'))
     return post
 
-# Define the Flask application
-dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {'wsgi': {
-        'class': 'logging.StreamHandler',
-        'stream': 'ext://flask.logging.wsgi_errors_stream',
-        'formatter': 'default'
-    }},
-    'root': {
-        'level': 'INFO',
-        'handlers': ['wsgi']
-    }
-})
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your secret key'
 
 # Define the main route of the web application 
 @app.route('/')
@@ -59,7 +41,7 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-      app.logger.warn('Article could not be found')
+      app.logger.warning('Article could not be found')
       return render_template('404.html'), 404
       
     else:
@@ -115,4 +97,21 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
-   app.run(host='0.0.0.0', port='3111')
+    # Define the Flask application
+    dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['wsgi']
+    }
+    })
+    app.config['SECRET_KEY'] = 'your secret key'
+    app.run(host='0.0.0.0', port='3111')
