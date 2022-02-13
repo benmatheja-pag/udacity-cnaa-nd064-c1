@@ -8,6 +8,8 @@
 
 ## Tips & Tricks
 
+### Python App
+
 Create virtual environment
 
 ````python
@@ -30,4 +32,12 @@ Init the DB
 
 ````python
 python init_db.py
+````
+
+### Helm and K8s
+
+Lint a Template and check kube conformance
+
+````bash
+helm template ./ -f Values-Prod.yaml | kubeconform -strict   
 ````

@@ -3,7 +3,7 @@ namespaceName: prod
 imageRepository: benmatheja/techtrends
 servicePort: 7111
 serviceTargetPort: 3111
-servivceProtocol: TCP
+serviceProtocol: TCP
 serviceType: ClusterIP
 imageTag: latest
 imagePullPolicy: Always
