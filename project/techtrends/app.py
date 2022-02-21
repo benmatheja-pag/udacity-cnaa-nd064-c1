@@ -23,7 +23,8 @@ def get_post(post_id):
     post = connection.execute('SELECT * FROM posts WHERE id = ?',
                         (post_id,)).fetchone()
     connection.close()
-    app.logger.info('Article %s retrieved', dict(post).get('title'))
+    if post:
+        app.logger.info('Article %s retrieved', dict(post).get('title'))
     return post
 
 # Define the Flask application
