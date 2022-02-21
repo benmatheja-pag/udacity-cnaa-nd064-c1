@@ -1,12 +1,32 @@
 import logging
+import logging.config
 import sqlite3
 
 from flask import Flask, jsonify, render_template, request, url_for, redirect, flash
 from logging.config import dictConfig
 
-open_connections = 0
+# Define the Flask application
+app = Flask(__name__)
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['wsgi']
+    }
+})
+
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
+# It is counting the performed connections into a single table
+open_connections = 0
 def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
@@ -25,23 +45,6 @@ def get_post(post_id):
         app.logger.info('Article %s retrieved', dict(post).get('title'))
     return post
 
-# Define the Flask application
-dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {'wsgi': {
-        'class': 'logging.StreamHandler',
-        'stream': 'ext://flask.logging.wsgi_errors_stream',
-        'formatter': 'default'
-    }},
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['wsgi']
-    }
-})
-app = Flask(__name__)
 
 # Define the main route of the web application 
 @app.route('/')
@@ -113,21 +116,5 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
-    # Define the Flask application
-    dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {'wsgi': {
-        'class': 'logging.StreamHandler',
-        'stream': 'ext://flask.logging.wsgi_errors_stream',
-        'formatter': 'default'
-    }},
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['wsgi']
-    }
-    })
     app.config['SECRET_KEY'] = 'your secret key'
     app.run(host='0.0.0.0', port='3111')
