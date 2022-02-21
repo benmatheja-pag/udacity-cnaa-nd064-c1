@@ -3,7 +3,7 @@ namespaceName: staging
 imageRepository: benmatheja/techtrends
 servicePort: 5111
 serviceTargetPort: 3111
-servivceProtocol: TCP
+serviceProtocol: TCP
 serviceType: ClusterIP
 imageTag: latest
 imagePullPolicy: IfNotPresent
