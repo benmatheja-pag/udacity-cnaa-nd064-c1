@@ -3,7 +3,7 @@ namespaceName: sandbox
 imageRepository: benmatheja/techtrends
 servicePort: 4111
 serviceTargetPort: 3111
-servivceProtocol: TCP
+serviceProtocol: TCP
 serviceType: ClusterIP
 imageTag: latest
 imagePullPolicy: IfNotPresent
